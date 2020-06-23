@@ -1,4 +1,7 @@
 
+上传：
+python setup.py sdist upload -r privatepypi 
+
 安装：
 pip3 install --upgrade -i http://172.18.34.10:3141 --trusted-host 172.18.34.10  KubeApi
 
@@ -18,5 +21,5 @@ kubeClient = KubeClient(uid)
 kubeClient.handle('deployment','CREATE',createData)     # 创建容器
 
 
-说明文档地址：
+详细说明文档地址：
 http://conf.ruijie.work/pages/viewpage.action?pageId=51645745
