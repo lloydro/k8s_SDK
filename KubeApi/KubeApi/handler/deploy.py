@@ -285,6 +285,7 @@ class DeployHandler(object):
                 result.get('datas').get('deps')[name]['mysql_port'] = port_dict["mysql"]
                 result.get('datas').get('deps')[name]['ssh_port'] = port_dict["ssh"]
                 result.get('datas').get('deps')[name]['web_ssh_port'] = port_dict["web_ssh"]
+                result.get('datas').get('deps')[name]['rf_port'] = port_dict["rf"]
                 result.get('datas').get('deps')[name]['error'] = ""
                 result.get('datas').get('deps')[name]['res'] = True
                 print('%s  exe_testcase ok' % (name))
