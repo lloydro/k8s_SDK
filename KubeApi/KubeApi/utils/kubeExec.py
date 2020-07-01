@@ -752,3 +752,70 @@ class KubeExec(object):
             print("Exception when calling APPSV1Api->list_namespaced_deployment: %s\n" % e)
             return False
 
+    def read_node(self, name):
+        try:
+            api_response = self.core_v1_api.read_node(name)
+            pprint(api_response)
+            return api_response
+        except ApiException as e:
+            print("Exception when calling CoreV1Api->list_node: %s\n" % e)
+            return False
+    
+    def read_node_status(self, name):
+        try:
+            api_response = self.core_v1_api.read_node_status(name)
+            pprint(api_response)
+            return api_response
+        except ApiException as e:
+            print("Exception when calling CoreV1Api->list_node: %s\n" % e)
+            return False
+    
+    def get_node_resource(self, name):
+        urls = {
+            'cpu_usage': CNI_URL + '/api/v1/model/nodes/' + name + '/metrics/cpu/request',
+            'memory_usage': CNI_URL + '/api/v1/model/nodes/' + name + '/metrics/memory/request',
+        }
+
+        headers = {
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "User-Agent": "python-requests/2.9.1",
+        }
+
+        response = {
+            'cpu_usage': 0,
+            'memory_usage': 0
+        }
+
+        cpu_usage_list = requests.get(url=urls['cpu_usage'], headers=headers).content
+        memory_usage_list = requests.get(url=urls['memory_usage'], headers=headers).content
+        cpu_usage_list = json.loads(cpu_usage_list)
+        memory_usage_list = json.loads(memory_usage_list)
+        if len(cpu_usage_list.get("metrics")) > 0:
+            cpu_usage = cpu_usage_list.get("metrics")[-1]
+            cpu_usage = cpu_usage.get("value")
+            response['cpu_usage'] = cpu_usage
+        if len(memory_usage_list.get("metrics")) > 0:
+            memory_usage = memory_usage_list.get("metrics")[-1]
+            memory_usage = memory_usage.get("value")
+            response['memory_usage'] = memory_usage
+
+        return response
+
+    def list_pod_for_all_namespaces(self):
+        try:
+            api_response = self.core_v1_api.list_pod_for_all_namespaces()
+            # pprint(api_response)
+            return api_response
+        except ApiException as e:
+            print("Exception when calling CoreV1Api->list_pod_for_all_namespaces: %s\n" % e)
+            return False
+    
+    def list_namespaced_pod(self,namespace):
+        try:
+            api_response = self.core_v1_api.list_namespaced_pod(namespace)
+            # pprint(api_response)
+            return api_response
+        except ApiException as e:
+            print("Exception when calling CoreV1Api->list_namespaced_pod: %s\n" % e)
+            return False

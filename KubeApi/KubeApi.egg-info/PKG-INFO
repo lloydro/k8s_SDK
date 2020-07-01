@@ -1,0 +1,14 @@
+Metadata-Version: 1.1
+Name: KubeApi
+Version: 1.0.1
+Summary: for auto test
+Home-page: UNKNOWN
+Author: wangyc
+Author-email: wangyongcheng@ruijie.com.cn
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3.4

@@ -15,6 +15,8 @@ import math
 import re
 from KubeApi.utils.kubeTask import KubeTask
 from KubeApi.utils.utils import datetime_now,nomalize_unit,random_int,get_namespace
+from KubeApi.config.settings import POD_IP_DELAY,POD_IP_TIMES
+
 
 
 class DeployHandler(object):
@@ -296,7 +298,28 @@ class DeployHandler(object):
                 result.get('datas').get('deps')[name]['error'] = str(e)
                 result["error"] = '容器创建过程出错'
                 result["status"] = False
-                
+        
+        # 添加podIp
+        for i in range(POD_IP_TIMES):
+            leng = 0 
+            time.sleep(POD_IP_DELAY)
+            pod_list = self.cnn.list_namespaced_pod(namespace)
+            # print(pod_list)
+            for name,body in result.get('datas').get('deps').items():
+                for pod in pod_list.items:
+                    if pod.metadata.name.find(name) != -1:
+                        pod_ip = pod.status.pod_ip
+                        print("get pod_ip, leng, name ====================",pod_ip,type(pod_ip),leng, name)
+                        if pod_ip != None:
+                            body['pod_ip'] = pod_ip
+                            leng += 1
+                            break
+
+            if leng == len(configList):
+                print("leng,len(configList) ====================",leng,len(configList))
+                break
+
+
         return result       
 
 
