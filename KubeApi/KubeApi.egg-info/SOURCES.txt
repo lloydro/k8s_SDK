@@ -6,6 +6,8 @@ KubeApi.egg-info/SOURCES.txt
 KubeApi.egg-info/dependency_links.txt
 KubeApi.egg-info/not-zip-safe
 KubeApi.egg-info/top_level.txt
+KubeApi/config/__init__.py
+KubeApi/config/settings.py
 KubeApi/handler/__init__.py
 KubeApi/handler/deploy.py
 KubeApi/utils/__init__.py

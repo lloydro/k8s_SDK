@@ -12,7 +12,7 @@ from setuptools import find_packages
 
 setup(
     name="KubeApi",
-    version="1.0.2",
+    version="1.0.4",
     author="wangyc",
     author_email="wangyongcheng@ruijie.com.cn",
     description="for auto test",
