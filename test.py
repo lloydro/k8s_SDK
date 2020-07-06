@@ -12,7 +12,7 @@ configList = [{
     "ephemeral_storage" : 10,
     "ports": [22,3000,3306,4200,8270],
     "node_labels": {
-        "app" : "local_test",
+        "app" : "jenkins",
     }
 # },{
 #     "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
@@ -40,7 +40,7 @@ depList = [{
 # },{
 #     "name" : 'xn-autotest-hanch6bc5e29dffec8727ad0e06c896f46ac9',
 # },{
-    "name" : 'xn-autotest-hanch713993df8289c256a416dd60f1e2cf2d',
+    "name" : 'xn-autotest-hanch4ea977f4fd46c70803794c3c6239c756',
 }]
 
 

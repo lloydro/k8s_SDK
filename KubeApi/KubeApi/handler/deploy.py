@@ -101,7 +101,7 @@ class DeployHandler(object):
             result["status"] = False
             return result
         
-        # node_labels参数
+        # node_labels参数, 不传参则默认为jenkins
         node_labels = {
             "app" : "jenkins",
         }
@@ -109,6 +109,7 @@ class DeployHandler(object):
             node_labels = configList[0].get("node_labels") 
 
         node_name_list = []    
+        node_name_list_for_local_test = []
         # 匹配node_name
         nodes = self.cnn.list_nodes().items
         for node in nodes:
@@ -116,10 +117,13 @@ class DeployHandler(object):
             for k,v in node_labels.items():
                 if node.metadata.name.find('node') != -1 and labels.get(k) == v:
                     node_name_list.append(node.metadata.name)
+            if node.metadata.name.find('node') != -1  and labels.get('app') == 'local_test': # 收集local_test的name
+                node_name_list_for_local_test.append(node.metadata.name)
 
-        # 指定node
+        # 指定node，若未匹配上，则采用local_test
         if len(node_name_list) <=0:
-            node_name_list = self.node_pool
+            node_name_list = node_name_list_for_local_test
+
         node_idx = random_int(len(node_name_list))
         node_name = node_name_list[node_idx]
 
