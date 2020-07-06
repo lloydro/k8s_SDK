@@ -10,14 +10,17 @@ configList = [{
     "cpu" : 500,
     "memory" : 200,
     "ephemeral_storage" : 10,
-    "ports": [22,3000,3306,4200,8270]
-},{
-    "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
-    "command" : '/usr/bin/AutoStart',
-    "cpu" : 500,
-    "memory" : 200,
-    "ephemeral_storage" : 10,
-    "ports": [22,3000,3306,4200,8270]
+    "ports": [22,3000,3306,4200,8270],
+    "node_labels": {
+        "app" : "local_test",
+    }
+# },{
+#     "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
+#     "command" : '/usr/bin/AutoStart',
+#     "cpu" : 500,
+#     "memory" : 200,
+#     "ephemeral_storage" : 10,
+#     "ports": [22,3000,3306,4200,8270]
 }]
 
 depList = [{
@@ -35,9 +38,9 @@ depList = [{
 # },{
 #     "name" : 'xn-autotest-hanchc5931a6c3730470e5ee98fc2b486626d',
 # },{
-    "name" : 'xn-autotest-hanch6bc5e29dffec8727ad0e06c896f46ac9',
-},{
-    "name" : 'xn-autotest-hanch65c0160329671d2fca8fe99f8c3a3c3d',
+#     "name" : 'xn-autotest-hanch6bc5e29dffec8727ad0e06c896f46ac9',
+# },{
+    "name" : 'xn-autotest-hanch713993df8289c256a416dd60f1e2cf2d',
 }]
 
 

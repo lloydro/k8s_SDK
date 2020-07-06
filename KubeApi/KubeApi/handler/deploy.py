@@ -52,7 +52,10 @@ class DeployHandler(object):
             "cpu" : 500,
             "memory" : 200,
             "ephemeral_storage" : 10,
-            "ports": "22,3000,3306,4200,8270"
+            "ports": "22,3000,3306,4200,8270",
+            "node_labels": {
+                "app" : "jenkins",
+            },
         }]
 
 
@@ -66,6 +69,7 @@ class DeployHandler(object):
                         'deploy_name': 'xn-autotest-hanch609badc9949011c53c8aa480de7bbb0e',
                         'service_name': 'xn-autotest-hanch609badc9949011c53c8aa480de7bbb0e',
                         'host_ip': '172.29.46.195',
+                        'pod_ip': '10.0.1.1',
                         'mysql_port': 47250,
                         'ssh_port': 61755,
                         'web_ssh_port': 51304,
@@ -96,15 +100,37 @@ class DeployHandler(object):
             print("DeployHandler >>>>> create_deps >>>>>>> the augment should be a list ")
             result["status"] = False
             return result
+        
+        # node_labels参数
+        node_labels = {
+            "app" : "jenkins",
+        }
+        if configList[0].get("node_labels"):
+            node_labels = configList[0].get("node_labels") 
+
+        node_name_list = []    
+        # 匹配node_name
+        nodes = self.cnn.list_nodes().items
+        for node in nodes:
+            labels = node.metadata.labels
+            for k,v in node_labels.items():
+                if node.metadata.name.find('node') != -1 and labels.get(k) == v:
+                    node_name_list.append(node.metadata.name)
 
         # 指定node
-        node_idx = random_int(len(self.node_pool))
-        node_name = self.node_pool[node_idx]
+        if len(node_name_list) <=0:
+            node_name_list = self.node_pool
+        node_idx = random_int(len(node_name_list))
+        node_name = node_name_list[node_idx]
+
+        print("node_name_list ========================================:",node_name_list)
+
         print("DeployHandler >>>>> create_deps >>>>>>> line 79 >>>>>> node is: ",node_name)
         node_selector = {
             "kubernetes.io/hostname": node_name
         }
         result.get('datas')['node'] = node_name
+
 
         for config in configList:
             body_name = self.uid.replace('-', '').replace('_','')
