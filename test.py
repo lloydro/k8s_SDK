@@ -2,7 +2,7 @@ from KubeApi.app import KubeClient
 
 is_create = False
 
-uid = 'han-chen'
+uid = 'fanmengyi'
 
 configList = [{
     "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
@@ -32,47 +32,16 @@ depList = [{
 # },{
 #     "name" : 'xn-autotest-hanch7555f934d44726b5bb67a27f7c684352',
 # },{
-#     "name" : 'xn-autotest-hanch781c8509bb9ef3501a8041dabc7f5231',
+#     "name" : 'xn-autotest-hanchdb83a9170535b51f2a94866c6be59de5',
 # },{
-#     "name" : 'xn-autotest-hanch79a45572e3c4b0a25c1df8c99f1af5e1',
+#     "name" : 'xn-autotest-hanchc5ba2af5168273d1fad519e3eff468b4',
 # },{
-#     "name" : 'xn-autotest-hanchc5931a6c3730470e5ee98fc2b486626d',
+#     "name" : 'xn-autotest-hanch8f74eb8012c715364b3b05dfde76927a',
 # },{
-#     "name" : 'xn-autotest-hanch6bc5e29dffec8727ad0e06c896f46ac9',
-# },{
-    "name" : 'xn-autotest-hanch4ea977f4fd46c70803794c3c6239c756',
+    "name" : 'xn-autotest-fanmec364d2b26bdf66885f1d500df00c7c9c',
+},{
+    "name" : 'xn-autotest-fanme9da1f0b6d153ba18bf762f9220eb9c00',
 }]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
