@@ -92,7 +92,8 @@ class DeployHandler(object):
         }
         url = REQUEST_URL + "/api/createDepsSDK"
         result = requests.post(url=url, data=json.dumps(data), headers=headers, verify=False)
-        result = json.loads(result.content)
+        result = result.content.decode('UTF-8')
+        result = json.loads(result)
         # pprint(result)
         return result
 
@@ -139,7 +140,8 @@ class DeployHandler(object):
         }
         url = REQUEST_URL + "/api/deleteDepsSDK"
         result = requests.post(url=url, data=json.dumps(data), headers=headers, verify=False)
-        result = json.loads(result.content)
+        result = result.content.decode('UTF-8')
+        result = json.loads(result)
         # pprint(result)
         return result
 

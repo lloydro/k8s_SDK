@@ -1,14 +1,8 @@
 #!/usr/bin/python
 # -*- coding:utf8 -*-
-from requests import request
-import json
-from requests.auth import HTTPBasicAuth
 import platform
-import os
-import sys
 import subprocess
 import paramiko
-from requests_toolbelt import MultipartEncoder
 import requests
 import time
 
@@ -60,7 +54,7 @@ def update_ip(content, url):
     import re
     already_content = False
     file_data = ''
-    content = content + '     ${600}'
+    #content = content 
     with open(url, 'r', encoding='UTF-8') as wf:
         lines = wf.readlines()
         for line in lines:
@@ -275,19 +269,24 @@ def run(file_name, image, dev, project, conan_argv, com, cc_port):
     createData = [{                      # 构造参数
     "image" : image,
     "command" : '/usr/bin/AutoStart',
-    "cpu" : 350,
-    "memory" : 500,
-    "ephemeral_storage" : 8,
+    "cpu" : 850,
+    "memory" : 800,
+    "ephemeral_storage" : 10,
+    "node_labels": {
+    
+         "app" : "jenkins",
+    
+    },
     "ports": [22,3306,4200,8270]
 }]
-    uid = 'wangyongcheng'
+    uid = 'common_user'
     kubeClient = KubeClient(uid)     # 初始化
     content = kubeClient.handle('deployment','CREATE',createData)
 
     for pod_name,body in content['datas']['deps'].items():
-        domain = body['host_ip']
-        port = body['rf_port']
-        ssh_port = body['ssh_port']
+        domain = body['pod_ip']
+        port = 8270
+        ssh_port = 22
         name = body['name']
         print('创建容器成功 %s'%(pod_name))
         try:
@@ -300,29 +299,29 @@ def run(file_name, image, dev, project, conan_argv, com, cc_port):
                     "namespace": "ceshi"
                 }
                 print("exe exe_data %s" % (exe_data))
-                print("check_port %s %s %s doing"%(domain,port,file_name))
+                print("check_port %s %s %s doing"%(domain,ssh_port,file_name))
                 check_port(domain, port=ssh_port)
-                print("check_port %s %s %s done"%(domain,port,file_name))
+                print("check_port %s %s %s done"%(domain,ssh_port,file_name))
                 print('remote_shell doing %s  %s'%(exe_data,file_name))
                 remote_shell(domain, exe_data, password='123456',ssh_port=ssh_port)
                 print('remote_shell done %s  %s'%(exe_data,file_name))
                 update_ip('http://' + domain + ':' + str(port), file_name)
                 case_name = file_name.split('/', file_name.count("/"))[-1][:-6]
                 filename_with_dev = file_name.replace(case_name, dev + '_' + case_name)
-                # print('remote_shell_cmd_get_output %s'%('cp %s %s' % (file_name, filename_with_dev)))
-                # output = remote_shell_cmd_get_output('cp %s %s' % (file_name, filename_with_dev), timeout=5400)
-                # print(str(output))
+                print('remote_shell_cmd_get_output %s'%('cp %s %s' % (file_name, filename_with_dev)))
+                output = remote_shell_cmd_get_output('cp %s %s' % (file_name, filename_with_dev), timeout=5400)
+                print('remote_shell_cmd_get_output',str(output))
                 check_port(domain, port=port)
-                r_cmd='robot --loglevel DEBUG -T -l %s_%s_log.html -o %s_%s_output.xml -r %s_%s_report.html  %s' % (
-                dev, case_name, dev, case_name, dev, case_name, filename_with_dev)
+                r_cmd='ls %s ;robot --loglevel DEBUG -T -l %s_%s_log.html -o %s_%s_output.xml -r %s_%s_report.html  %s' % (
+                filename_with_dev,dev, case_name, dev, case_name, dev, case_name, filename_with_dev)
                 print('用例%s r_cmd %s doing'%(case_name,r_cmd))
-                output = subprocess.call(r_cmd, shell=True,timeout=5400)
+                output = subprocess.call(r_cmd, shell=True,timeout=7200)
                 print('用例%s r_cmd %s done'%(case_name,r_cmd))
-                print('用例执行结果:%s'%(str(output)))
+                print('用例执行结果result:%s'%(str(output)))
 
             if conan_argv != 'none':
                 print('用例%s 覆盖率统计开始'%(case_name))
-                gen_info(body["host_ip"], body["ssh_port"], com, cc_port)
+                gen_info(domain, ssh_port, com, cc_port)
                 print('用例%s 覆盖率统计结束'%(case_name))
 
             if name != []:
@@ -332,6 +331,7 @@ def run(file_name, image, dev, project, conan_argv, com, cc_port):
 
                      },
                 ]
+                print("data %s"%(data))
                 result = kubeClient.handle('deployment','DELETE',data)
                 if result['status'] is True:
                     print('用例%s 删除容器成功 %s'%(case_name,data))
@@ -345,6 +345,7 @@ def run(file_name, image, dev, project, conan_argv, com, cc_port):
 
                     },
                 ]
+                print("data %s"%(data))
                 result = kubeClient.handle('deployment', 'DELETE', data)
                 if result['status'] is True:
                     print('用例%s 删除容器成功 %s' % (case_name, data))

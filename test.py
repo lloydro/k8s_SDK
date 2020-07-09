@@ -1,8 +1,8 @@
 from KubeApi.app import KubeClient
 
-is_create = False
+is_create = True
 
-uid = 'fanmengyi'
+uid = 'han-chen'
 
 configList = [{
     "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
@@ -38,9 +38,9 @@ depList = [{
 # },{
 #     "name" : 'xn-autotest-hanch8f74eb8012c715364b3b05dfde76927a',
 # },{
-    "name" : 'xn-autotest-fanmec364d2b26bdf66885f1d500df00c7c9c',
-},{
-    "name" : 'xn-autotest-fanme9da1f0b6d153ba18bf762f9220eb9c00',
+#     "name" : 'xn-autotest-fanmec364d2b26bdf66885f1d500df00c7c9c',
+# },{
+    "name" : 'xn-autotest-fanme426f4c2a00eb78815202f5576825a7dd',
 }]
 
 
@@ -48,6 +48,8 @@ depList = [{
 kubeClient = KubeClient(uid)
 
 if is_create:
-    print(kubeClient.handle('deployment','CREATE',configList))
+    res = kubeClient.handle('deployment','CREATE',configList)
+    print(res,type(res))
 else:
-    print(kubeClient.handle('deployment','DELETE',depList))
+    res = kubeClient.handle('deployment','DELETE',depList)
+    print(res,type(res))
