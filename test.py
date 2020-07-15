@@ -1,7 +1,7 @@
 from KubeApi.app import KubeClient
 import _thread
 
-THREAD_NUM = 30
+THREAD_NUM = 1
 
 is_create = True
 
