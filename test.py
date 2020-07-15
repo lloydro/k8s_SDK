@@ -1,9 +1,9 @@
 from KubeApi.app import KubeClient
 import _thread
 
-THREAD_NUM = 1
+THREAD_NUM = 30
 
-is_create = False
+is_create = True
 
 uid = 'han-chen'
 

@@ -13,7 +13,7 @@ import uuid
 import random
 import math
 import re
-from KubeApi.config.settings import REQUEST_URL
+from KubeApi.config.settings import REQUEST_URL,POD_IP_TIMES,POD_IP_DELAY
 import requests
 
 
@@ -94,6 +94,31 @@ class DeployHandler(object):
         result = requests.post(url=url, data=json.dumps(data), headers=headers, verify=False)
         result = result.content.decode('UTF-8')
         result = json.loads(result)
+
+
+        # get pod_ip 
+        # 添加podIp
+        url = REQUEST_URL + "/api/getPodIps"
+        podNames = []
+        for name,props in result.get("datas").get("deps").items():
+            podNames.append(name)
+
+        for i in range(POD_IP_TIMES):
+            
+            time.sleep(POD_IP_DELAY)
+
+            res = requests.post(url=url, data=json.dumps(podNames), headers=headers, verify=False)
+            res = res.content.decode('UTF-8')
+            res = json.loads(res)
+            # print('get_pod_res====================',res)
+            if res.get('status') == True:
+                pod_ips = res.get('datas')
+                for name,props in result.get("datas").get("deps").items():
+                    result.get("datas").get("deps")[name]['pod_ip'] = pod_ips[name]
+                break
+
+            
+
         # pprint(result)
         return result
 
