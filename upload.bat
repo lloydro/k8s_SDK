@@ -1,0 +1,1 @@
+twine upload --repository-url http://172.18.34.10:3141  dist/*

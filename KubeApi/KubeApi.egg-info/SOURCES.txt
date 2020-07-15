@@ -1,3 +1,4 @@
+README.md
 setup.py
 KubeApi/__init__.py
 KubeApi/app.py
@@ -10,7 +11,3 @@ KubeApi/config/__init__.py
 KubeApi/config/settings.py
 KubeApi/handler/__init__.py
 KubeApi/handler/deploy.py
-KubeApi/utils/__init__.py
-KubeApi/utils/kubeExec.py
-KubeApi/utils/kubeTask.py
-KubeApi/utils/utils.py
