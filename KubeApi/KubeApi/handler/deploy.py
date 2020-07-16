@@ -80,33 +80,94 @@ class DeployHandler(object):
 
     '''
     def create_deps(self,configList):
-        data = {
-            'uid': self.uid,
-            'configList': configList
+
+
+        result = {
+            'datas': {
+                'node': '',
+                'deps':{}
+            },
+            'error': '',
+            'status': True
         }
 
+        # 过滤出来的属性
+        result_deps_pool = ['name','deploy_name','service_name','host_ip','mysql_port','ssh_port','pod_ip','web_ssh_port','port_map','error','res']
+
+        reqData = []
+        
+        for config in configList:
+            
+            # 端口数据转字符串
+            for i in range( len(config.get('ports')) ):
+                config.get('ports')[i] = str(config.get('ports')[i]) 
+
+            reqData.append({
+                "id": uuid.uuid4().__str__(),
+                "uid": self.uid,
+                "image": config.get('image'),
+                "label": '', 
+                "name": 'sdkuser',
+                "command": config.get('command'), 
+                "cpu": config.get('cpu'), 
+                "memory": config.get('memory'), 
+                "ephemeral_storage": config.get('ephemeral_storage'), 
+                "ports": ','.join(config.get('ports')), 
+                "is_build": 0,
+                "is_persistent": 0,
+                "p_name": '',
+                "p_path": '',
+                "p_storage": 0,
+                "sub_net_name": [],
+                "node_name": '',
+                "pic": '',
+                "coordinate": [],
+                "is_set": -1,
+                "node_labels": config.get('node_labels')
+            })
+        
         headers = {
             "Accept": "*/*",
             "Accept-Encoding": "gzip, deflate",
             "User-Agent": "python-requests/2.9.1",
         }
-        url = REQUEST_URL + "/api/createDepsSDK"
-        result = requests.post(url=url, data=json.dumps(data), headers=headers, verify=False)
-        result = result.content.decode('UTF-8')
-        result = json.loads(result)
+        url = REQUEST_URL + "/api/multiDeploy"
+        response = requests.post(url=url, data=json.dumps(reqData), headers=headers, verify=False)
+        response = response.content.decode('UTF-8')
+        response = json.loads(response)
 
+        # pprint(response)
 
+        datas = response.get('data')
+        # print('===========================')
+        # 调整result结构
+
+        id_to_name_map = {} # id与name的映射关系
+        podNames = [] # 容器name列表，获取pod_ip时候用
+        
+        result.get("datas")["node"] = datas.get('node')
+
+        # 构造容器属性body，并补充map列表
+        for id,name in datas.get('name').items():
+            result.get("datas").get("deps")[name] = {}
+            id_to_name_map[id] = name 
+            podNames.append(name)
+
+        # 填充容器属性
+        for k,v in datas.items():
+            if k in result_deps_pool:
+                for dep_id,dep_val in v.items():
+                    dep_name = id_to_name_map[dep_id]
+                    if dep_name:
+                        result.get("datas").get("deps")[dep_name][k] = dep_val
+
+        # pprint(result)
+        # print('++++++++++++++++++++++++++++++++++')
         # get pod_ip 
         # 添加podIp
         url = REQUEST_URL + "/api/getPodIps"
-        podNames = []
-        for name,props in result.get("datas").get("deps").items():
-            podNames.append(name)
-
         for i in range(POD_IP_TIMES):
-            
             time.sleep(POD_IP_DELAY)
-
             res = requests.post(url=url, data=json.dumps(podNames), headers=headers, verify=False)
             res = res.content.decode('UTF-8')
             res = json.loads(res)
