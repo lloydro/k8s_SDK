@@ -2,7 +2,7 @@ from KubeApi.app import KubeClient
 import _thread
 THREAD_NUM = 1
 
-is_create = False
+is_create = True
 
 uid = 'han_chen'
 
@@ -13,9 +13,9 @@ configList = [{
     "memory" : 200,
     "ephemeral_storage" : 10,
     "ports": [22,3000,3306,4200,8270],
-    "node_labels": {
-        "app" : "jenkins",
-    }
+    # "node_labels": {
+    #     "app" : "jenkins",
+    # }
 # },{
 #     "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
 #     "command" : '/usr/bin/AutoStart',
@@ -23,9 +23,9 @@ configList = [{
 #     "memory" : 200,
 #     "ephemeral_storage" : 10,
 #     "ports": [22,3000,3306,4200,8270],
-#     "node_labels": {
-#         "app" : "jenkins",
-#     }
+    # "node_labels": {
+    #     "app" : "jenkins",
+    # }
 }]
 
 depNames = [

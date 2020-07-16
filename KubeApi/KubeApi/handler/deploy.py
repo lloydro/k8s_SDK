@@ -92,7 +92,7 @@ class DeployHandler(object):
         }
 
         # 过滤出来的属性
-        result_deps_pool = ['name','deploy_name','service_name','host_ip','mysql_port','ssh_port','pod_ip','web_ssh_port','port_map','error','res']
+        result_deps_pool = ['name','deploy_name','service_name','host_ip','rf_port','mysql_port','ssh_port','pod_ip','web_ssh_port','port_map','error','res']
 
         reqData = []
         
@@ -177,8 +177,21 @@ class DeployHandler(object):
                 for name,props in result.get("datas").get("deps").items():
                     result.get("datas").get("deps")[name]['pod_ip'] = pod_ips[name]
                 break
+        
 
-            
+        # 超出等待时间，需要删除未获取到pod_ip的容器，并抛异常
+        # delete_dep_list = []
+        # for d_name,d_item in result.get("datas").get("deps").items():
+        #     if not d_item.get('pod_ip'):
+        #         delete_dep_list.append({
+        #             "name" : d_name
+        #         })
+        # if len(delete_dep_list) > 0:
+        #     print('----------------以下容器未获得pod_ip，需要删除-----------------------:')
+        #     print(delete_dep_list)
+        #     delete_res = self.delete_deps(delete_dep_list)
+        #     print('----------------删除结果-------------------:')
+        #     print(delete_res)
 
         # pprint(result)
         return result
