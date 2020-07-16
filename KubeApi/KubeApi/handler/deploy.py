@@ -153,9 +153,14 @@ class DeployHandler(object):
 
     '''
     def delete_deps(self,depList):
-        data = {
-            'uid': self.uid,
-            'depList': depList
+
+        result = {
+            'datas': {
+                'node': '',
+                'deps':{}
+            },
+            'error': '',
+            'status': True
         }
 
         headers = {
@@ -163,10 +168,31 @@ class DeployHandler(object):
             "Accept-Encoding": "gzip, deflate",
             "User-Agent": "python-requests/2.9.1",
         }
-        url = REQUEST_URL + "/api/deleteDepsSDK"
-        result = requests.post(url=url, data=json.dumps(data), headers=headers, verify=False)
-        result = result.content.decode('UTF-8')
-        result = json.loads(result)
+
+        # 构造请求
+        reqData = []
+        for dep in depList:
+            reqData.append({
+                'id': '',
+                'uid': self.uid,
+                'name': dep.get('name'),
+                'is_set': -1
+            })
+
+        url = REQUEST_URL + "/api/delDeploy"
+        response = requests.post(url=url, data=json.dumps(reqData), headers=headers, verify=False)
+        response = response.content.decode('UTF-8')
+
+        response = json.loads(response)
+
+        result['datas'] = response.get('data')
+        if result.get('datas').get('deps'):
+            for k,v in result.get('datas').get('deps').items():
+                if v.get('deleteRes') == False:
+                    result['error'] = '容器删除过程出错'
+                    result['status'] = False
+                    break
+
         # pprint(result)
         return result
 
