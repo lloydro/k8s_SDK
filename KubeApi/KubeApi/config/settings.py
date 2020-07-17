@@ -4,5 +4,5 @@ REQUEST_URL = 'http://cloud.ruijie.work:9527'
 
 
 # ================ 定时配置 ===================
-POD_IP_DELAY = 1 # 获取pod ip的等待时间，单位s
-POD_IP_TIMES = 1 # 获取pod ip的次数
+POD_IP_DELAY = 10 # 获取pod ip的等待时间，单位s
+POD_IP_TIMES = 1440 # 获取pod ip的次数

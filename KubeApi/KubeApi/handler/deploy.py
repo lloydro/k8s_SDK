@@ -180,19 +180,33 @@ class DeployHandler(object):
         
 
         # 超出等待时间，需要删除未获取到pod_ip的容器，并抛异常
-        # delete_dep_list = []
-        # for d_name,d_item in result.get("datas").get("deps").items():
-        #     if not d_item.get('pod_ip'):
-        #         delete_dep_list.append({
-        #             "name" : d_name
-        #         })
-        # if len(delete_dep_list) > 0:
-        #     print('----------------以下容器未获得pod_ip，需要删除-----------------------:')
-        #     print(delete_dep_list)
-        #     delete_res = self.delete_deps(delete_dep_list)
-        #     print('----------------删除结果-------------------:')
-        #     print(delete_res)
-
+        delete_dep_list = []
+        for d_name,d_item in result.get("datas").get("deps").items():
+            # 有一个没得到pod_ip，就都删除
+            if not d_item.get('pod_ip'):
+                if len(podNames) > 0:
+                    for p_name in podNames:
+                        delete_dep_list.append({
+                            "name" : p_name
+                        })
+                    print('----------------部分容器未获得pod_ip，需要删除所有容器:-----------------------:')
+                    print(podNames)
+                    delete_res = self.delete_deps(delete_dep_list)
+                    print('----------------删除结果-------------------:')
+                    print(delete_res)
+                    # TODO.清空result数据
+                    result = {
+                        'datas': {
+                            'node': '',
+                            'deps':{}
+                        },
+                        'error': '',
+                        'status': True
+                    }
+                    result['error'] = '创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置'
+                    result['status'] = False
+                    # raise Exception("创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置")
+                    
         # pprint(result)
         return result
 
