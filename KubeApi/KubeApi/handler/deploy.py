@@ -142,14 +142,14 @@ class DeployHandler(object):
 
         status = response.get('status')
 
-        print(status)
+        # print(status)
         if status:
             for k,v in status.items():
                 if v == False:
                     result['error'] = '容器创建过程出错'
                     result['status'] = False
                     break
-        print('===========================')
+        # print('===========================')
 
         # 容器创建都成功
         if result['status'] == True:
