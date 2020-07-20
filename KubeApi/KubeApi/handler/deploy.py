@@ -362,6 +362,6 @@ class DeployHandler(object):
         for item in response.get('data').get("_items"):
             result['datas']['names'].append(item.get("_spec").get("_containers")[0].get("_name"))
 
-        pprint(result)
+        # pprint(result)
         return result
             

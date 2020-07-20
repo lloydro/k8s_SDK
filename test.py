@@ -5,7 +5,7 @@ THREAD_NUM = 1
 is_get_pod_list = True
 is_create = True
 
-uid = 'chenjinbu'
+uid = 'han_chen'
 
 configList = [{
     'image': 'docker-hub.ruijie.work/base_project/robotframework-branch_12.5pl1:latest',
@@ -14,9 +14,9 @@ configList = [{
 	'memory': 2048,
 	'ephemeral_storage': 10,
 	'ports': [22, 3000, 3306, 4200, 8270],
-    # "node_labels": {
-    #     "app" : "jenkins",
-    # }
+    "node_labels": {
+        "app" : "jenkins",
+    }
 # },{
 #     "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
 #     "command" : '/usr/bin/AutoStart',
