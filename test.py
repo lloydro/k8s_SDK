@@ -7,12 +7,12 @@ is_create = True
 uid = 'han_chen'
 
 configList = [{
-    "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
-    "command" : '/usr/bin/AutoStart',
-    "cpu" : 500,
-    "memory" : 200,
-    "ephemeral_storage" : 10,
-    "ports": [22,3000,3306,4200,8270],
+    'image': 'docker-hub.ruijie.work/base_project/robotframework-branch_12.5pl1:latest',
+	'command': '/usr/bin/AutoStart',
+	'cpu': 1000,
+	'memory': 2048,
+	'ephemeral_storage': 10,
+	'ports': [22, 3000, 3306, 4200, 8270],
     # "node_labels": {
     #     "app" : "jenkins",
     # }

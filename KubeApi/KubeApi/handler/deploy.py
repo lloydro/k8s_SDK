@@ -145,7 +145,7 @@ class DeployHandler(object):
         # print(status)
         if status:
             # 资源是否不足
-            if status.get('outOfResource') == True：
+            if status.get('outOfResource') == True:
                 result['error'] = '无可分配资源，请适当释放您的资源或通知资源负责人'
                 result['status'] = False
                 return result
