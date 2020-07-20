@@ -22,7 +22,7 @@ class KubeClient(object):
         kubeClient.handle('deployment','CREATE',configList)
 
     '''
-    def handle(self, resource_type, handle_type, datas ):
+    def handle(self, resource_type, handle_type, datas = '' ):
 
         result = {
             'error': '方法不存在: ' + handle_type + ' -> '+ handle_type,
@@ -36,6 +36,10 @@ class KubeClient(object):
         if resource_type == 'deployment' and handle_type == 'DELETE':
             handler = DeployHandler(self.uid)
             result = handler.delete_deps(datas)
+
+        if resource_type == 'deployment' and handle_type == 'GET_NAMES':
+            handler = DeployHandler(self.uid)
+            result = handler.get_pod_list()
 
 
         return result

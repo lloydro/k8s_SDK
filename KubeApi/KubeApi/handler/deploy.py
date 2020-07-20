@@ -311,4 +311,57 @@ class DeployHandler(object):
 
 
 
+
+
+    '''
+    get pod list. （获取容器列表）
+
+    ::
+    
+        >>>  Request example:
+
+        Null
+
+        >>> Response example:
+        {
+            'datas': {
+                'node': '',
+                'names': ['xn-vdsvsdvds','vsdvvsdvsdvsdvsd']
+            },
+            'error': '',
+            'status': True
+        }
+
+    '''
+
+    def get_pod_list(self):
+
+        result = {
+            'datas': {
+                'names':[]
+            },
+            'error': '',
+            'status': True
+        }
+
+        headers = {
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "User-Agent": "python-requests/2.9.1",
+        }
+
+        # 构造请求
+        
+        url = REQUEST_URL + "/api/listNamespacedPod?namespace=" + self.uid + '-ns'
+        # print(url)
+        response = requests.get(url=url, headers=headers, verify=False)
+        response = response.content.decode('UTF-8')
+
+        response = json.loads(response)
+
+        for item in response.get('data').get("_items"):
+            result['datas']['names'].append(item.get("_spec").get("_containers")[0].get("_name"))
+
+        pprint(result)
+        return result
             

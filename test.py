@@ -2,7 +2,8 @@ from KubeApi.app import KubeClient
 import _thread
 THREAD_NUM = 1
 
-is_create = False
+is_get_pod_list = True
+is_create = True
 
 uid = 'niewenna'
 
@@ -29,7 +30,7 @@ configList = [{
 }]
 
 depNames = [
-"xn-autotest-sdkusa43c309c3b6d351dff2cef1716c7c417",
+"xn-autotest-sdkusf4bbfd77167a73ad37d9b672d41b23c7",
 ]
 
 
@@ -74,11 +75,20 @@ def deleteDeps():
     print(res,type(res))
 
 
+def getPodList():
+    kubeClient = KubeClient(uid)
+    res = kubeClient.handle('deployment','GET_NAMES')
+    print(res,type(res))
+
+
 for i in range(THREAD_NUM):
-    if is_create:
-        _thread.start_new_thread(createDeps,(),)
+    if is_get_pod_list:
+         _thread.start_new_thread(getPodList,(),)
     else:
-        _thread.start_new_thread(deleteDeps,(),)
+        if is_create:
+            _thread.start_new_thread(createDeps,(),)
+        else:
+            _thread.start_new_thread(deleteDeps,(),)
 
 
 while(True):
