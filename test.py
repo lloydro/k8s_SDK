@@ -5,7 +5,7 @@ THREAD_NUM = 1
 is_get_pod_list = True
 is_create = True
 
-uid = 'niewenna'
+uid = 'chenjinbu'
 
 configList = [{
     'image': 'docker-hub.ruijie.work/base_project/robotframework-branch_12.5pl1:latest',
