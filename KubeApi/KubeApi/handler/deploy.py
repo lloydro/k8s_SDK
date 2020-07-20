@@ -227,6 +227,10 @@ class DeployHandler(object):
                         result['error'] = '创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置'
                         result['status'] = False
                         # raise Exception("创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置")
+        
+        if  result.get('datas').get('deps') == {} and result.get('status') == True:
+            result['error'] = '未获取到容器创建数据'
+            result['status'] = False
                     
         # pprint(result)
         return result

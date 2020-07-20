@@ -2,9 +2,9 @@ from KubeApi.app import KubeClient
 import _thread
 THREAD_NUM = 1
 
-is_create = True
+is_create = False
 
-uid = 'han_chen'
+uid = 'niewenna'
 
 configList = [{
     'image': 'docker-hub.ruijie.work/base_project/robotframework-branch_12.5pl1:latest',
@@ -29,10 +29,7 @@ configList = [{
 }]
 
 depNames = [
-"xn-autotest-sdkus182bc34494ea546dec714b2a707d5601",
-"xn-autotest-sdkus8ad0214779d99e2f0801571ef7ba6b1f",
-"xn-autotest-sdkusa7b5f9ec4395055bc64b7539ec04a8e8",
-"xn-autotest-sdkusb75a0196c79e14103413754bfa525b77",
+"xn-autotest-sdkusa43c309c3b6d351dff2cef1716c7c417",
 ]
 
 
