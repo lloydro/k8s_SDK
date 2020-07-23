@@ -101,6 +101,8 @@ class DeployHandler(object):
             # 端口数据转字符串
             for i in range( len(config.get('ports')) ):
                 config.get('ports')[i] = str(config.get('ports')[i]) 
+            
+            is_resource_occupied = config.get('is_resource_occupied') if config.get('is_resource_occupied') else 0
 
             reqData.append({
                 "id": uuid.uuid4().__str__(),
@@ -115,6 +117,7 @@ class DeployHandler(object):
                 "ports": ','.join(config.get('ports')), 
                 "is_build": 0,
                 "is_persistent": 0,
+                "is_resource_occupied": is_resource_occupied,
                 "p_name": '',
                 "p_path": '',
                 "p_storage": 0,
