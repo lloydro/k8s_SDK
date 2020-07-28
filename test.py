@@ -8,14 +8,14 @@ is_create = True
 uid = 'han_chen'
 
 configList = [{
-    'image': 'docker-hub.ruijie.work/base_project/robotframework-branch_12.5pl1:latest',
+    'image': '111',
 	'command': '/usr/bin/AutoStart',
 	'cpu': 800,
 	'memory': 800,
 	'ephemeral_storage': 10,
 	'ports': [22, 3000, 3306, 4200, 8270],
     "node_labels": {
-        "app" : "jenkins",
+        "app" : "local_test",
     },
     "is_resource_occupied": 1
 # },{
@@ -31,7 +31,13 @@ configList = [{
 }]
 
 depNames = [
-"xn-autotest-sdkus9795b52e2da8499e854a4d4c44428233",
+"xn-autotest-sdkus0029a2407d5017cbfc4741d98b2ae2e8",
+"xn-autotest-sdkus326656e9ae0d48a5fc8c3970d2b4c15d",
+"xn-autotest-sdkus7b3bac67e5670e3796a7bf4aef1367f4",
+"xn-autotest-sdkus82de165c4a1bb7ee283f3562918c2b82",
+"xn-autotest-sdkus8630afa6f769afa30db284863694ff6c",
+"xn-autotest-sdkusadbe3cdb9be1075f4e867213e8dc4b4e",
+"xn-autotest-sdkusaeee19d4b91d259cd2a82969c285de9a",
 ]
 
 

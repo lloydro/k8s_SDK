@@ -201,7 +201,6 @@ class DeployHandler(object):
                     for name,props in result.get("datas").get("deps").items():
                         result.get("datas").get("deps")[name]['pod_ip'] = pod_ips[name]
                     break
-            
 
             # 超出等待时间，需要删除未获取到pod_ip的容器，并抛异常
             delete_dep_list = []
@@ -230,6 +229,15 @@ class DeployHandler(object):
                         result['error'] = '创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置'
                         result['status'] = False
                         # raise Exception("创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置")
+            
+            # 获取到podIp后，判断容器状态
+            url_status = REQUEST_URL + "/api/isPodRunning?uid=" + self.uid
+            res_status = requests.post(url=url_status, data=json.dumps(podNames), headers=headers, verify=False)
+            res_status = res_status.content.decode('UTF-8')
+            res_status = json.loads(res_status)
+            if res_status.get('status') == False:
+                result['error'] = res_status.get('error')
+                result['status'] = False
         
         if  result.get('datas').get('deps') == {} and result.get('status') == True:
             result['error'] = '未获取到容器创建数据'
