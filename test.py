@@ -8,7 +8,7 @@ is_create = True
 uid = 'han_chen'
 
 configList = [{
-    'image': '111',
+    'image': 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
 	'command': '/usr/bin/AutoStart',
 	'cpu': 800,
 	'memory': 800,
@@ -31,13 +31,7 @@ configList = [{
 }]
 
 depNames = [
-"xn-autotest-sdkus0029a2407d5017cbfc4741d98b2ae2e8",
-"xn-autotest-sdkus326656e9ae0d48a5fc8c3970d2b4c15d",
-"xn-autotest-sdkus7b3bac67e5670e3796a7bf4aef1367f4",
-"xn-autotest-sdkus82de165c4a1bb7ee283f3562918c2b82",
-"xn-autotest-sdkus8630afa6f769afa30db284863694ff6c",
-"xn-autotest-sdkusadbe3cdb9be1075f4e867213e8dc4b4e",
-"xn-autotest-sdkusaeee19d4b91d259cd2a82969c285de9a",
+"xn-autotest-sdkuse83ef605d4dc760c1340024fb057cd73",
 ]
 
 
