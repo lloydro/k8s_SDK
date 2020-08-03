@@ -17,7 +17,8 @@ configList = [{
     "node_labels": {
         "app" : "local_test",
     },
-    "is_resource_occupied": 1
+    "is_resource_occupied": 1,
+    "life_days": 1
 # },{
 #     "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
 #     "command" : '/usr/bin/AutoStart',
@@ -31,7 +32,7 @@ configList = [{
 }]
 
 depNames = [
-"xn-autotest-sdkuse83ef605d4dc760c1340024fb057cd73",
+"xn-autotest-sdkusfe8b079a1728837ffaed9d31d47897e9",
 ]
 
 

@@ -103,6 +103,7 @@ class DeployHandler(object):
                 config.get('ports')[i] = str(config.get('ports')[i]) 
             
             is_resource_occupied = config.get('is_resource_occupied') if config.get('is_resource_occupied') else 0
+            life_days = config.get('life_days') if config.get('life_days') else 0
 
             reqData.append({
                 "id": uuid.uuid4().__str__(),
@@ -126,7 +127,8 @@ class DeployHandler(object):
                 "pic": '',
                 "coordinate": [],
                 "is_set": -1,
-                "node_labels": config.get('node_labels')
+                "node_labels": config.get('node_labels'),
+                "life_days": life_days,
             })
         
         headers = {
