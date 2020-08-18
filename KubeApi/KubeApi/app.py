@@ -41,5 +41,8 @@ class KubeClient(object):
             handler = DeployHandler(self.uid)
             result = handler.get_pod_list()
 
+        if resource_type == 'deployment' and handle_type == 'GET_DEPS_BY_UID':
+            handler = DeployHandler(self.uid)
+            result = handler.get_deps_by_uid()
 
         return result

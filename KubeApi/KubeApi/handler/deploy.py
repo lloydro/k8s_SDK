@@ -364,8 +364,8 @@ class DeployHandler(object):
         }
 
         # 构造请求
-        
-        url = REQUEST_URL + "/api/listNamespacedPod?namespace=" + self.uid + '-ns'
+        uid = self.uid.replace("_", "-")
+        url = REQUEST_URL + "/api/listNamespacedPod?namespace=" + uid + '-ns'
         # print(url)
         response = requests.get(url=url, headers=headers, verify=False)
         response = response.content.decode('UTF-8')
@@ -378,3 +378,86 @@ class DeployHandler(object):
         # pprint(result)
         return result
             
+
+
+
+    '''
+    get deps by uid. （根据uid获取容器详情）
+
+    ::
+    
+        >>>  Request example:
+
+        Null
+
+        >>> Response example:
+        {
+            'datas': {
+                'deps': [
+                    {
+                        "id": "9a95debb-0fb4-490b-a8bb-76489dbd9f28",
+                        "uid": "han_chen",
+                        "label": "",
+                        "name": "xn-autotest-sdkusb314561ea0f6ecf330d882b32a9de070",
+                        "host_ip": "172.29.46.208",
+                        "ssh_port": 43203,
+                        "web_ssh_port": 57072,
+                        "cpu": 800,
+                        "memory": 800,
+                        "ephemeral_storage": 10,
+                        "ports": "22->43203,3000->64152,3306->53869,4200->57072,8270->59229",
+                        "node_name": "node05",
+                        "image": "docker-hub.ruijie.work/base_project/bfn-rf:latest"
+                    },{
+                        "id": "9a95debb-0fb4-490b-a8bb-76489dbd9f28",
+                        "uid": "han_chen",
+                        "label": "",
+                        "name": "xn-autotest-sdkusb314561ea0f6ecf330d882b32a9de070",
+                        "host_ip": "172.29.46.208",
+                        "ssh_port": 43203,
+                        "web_ssh_port": 57072,
+                        "cpu": 800,
+                        "memory": 800,
+                        "ephemeral_storage": 10,
+                        "ports": "22->43203,3000->64152,3306->53869,4200->57072,8270->59229",
+                        "node_name": "node05",
+                        "image": "docker-hub.ruijie.work/base_project/bfn-rf:latest"
+                    }
+                ]
+            },
+            'error': '',
+            'status': True
+        }
+
+    '''
+
+    def get_deps_by_uid(self):
+
+        result = {
+            'datas': {
+                'deps':[]
+            },
+            'error': '',
+            'status': True
+        }
+
+        headers = {
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "User-Agent": "python-requests/2.9.1",
+        }
+
+        # 构造请求
+        
+        url = REQUEST_URL + "/api/getDepByUid?uid=" + self.uid
+        # print(url)
+        response = requests.get(url=url, headers=headers, verify=False)
+        response = response.content.decode('UTF-8')
+
+        response = json.loads(response)
+        deps = response.get('data').get("deps")
+        if len(deps) > 0:
+            result['datas']['deps'] = deps
+
+        # pprint(result)
+        return result

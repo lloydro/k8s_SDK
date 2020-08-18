@@ -2,6 +2,7 @@ from KubeApi.app import KubeClient
 import _thread
 THREAD_NUM = 1
 
+is_get_pod_by_uid = True
 is_get_pod_list = False
 is_create = True
 
@@ -82,9 +83,16 @@ def getPodList():
     res = kubeClient.handle('deployment','GET_NAMES')
     print(res,type(res))
 
+def getPodByUid():
+    kubeClient = KubeClient(uid)
+    res = kubeClient.handle('deployment','GET_DEPS_BY_UID')
+    print(res,type(res))
+
 
 for i in range(THREAD_NUM):
-    if is_get_pod_list:
+    if is_get_pod_by_uid:
+         _thread.start_new_thread(getPodByUid,(),)
+    elif is_get_pod_list:
          _thread.start_new_thread(getPodList,(),)
     else:
         if is_create:
