@@ -2,7 +2,7 @@ from KubeApi.app import KubeClient
 import _thread
 THREAD_NUM = 1
 
-is_get_pod_by_uid = True
+is_get_pod_by_uid = False
 is_get_pod_list = False
 is_create = True
 
@@ -16,7 +16,7 @@ configList = [{
 	'ephemeral_storage': 10,
 	'ports': [22, 3000, 3306, 4200, 8270],
     "node_labels": {
-        "app" : "local_test",
+        "app" : "sandbox",
     },
     "is_resource_occupied": 1,
     "life_days": 1
