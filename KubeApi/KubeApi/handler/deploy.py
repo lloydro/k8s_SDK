@@ -105,6 +105,9 @@ class DeployHandler(object):
             is_resource_occupied = config.get('is_resource_occupied') if config.get('is_resource_occupied') else 0
             life_days = config.get('life_days') if config.get('life_days') else 0
 
+            is_count = config.get('is_count') if config.get('is_count') else 0
+            max_count = config.get('max_count') if config.get('max_count') else 0
+
             reqData.append({
                 "id": uuid.uuid4().__str__(),
                 "uid": self.uid,
@@ -129,6 +132,8 @@ class DeployHandler(object):
                 "is_set": -1,
                 "node_labels": config.get('node_labels'),
                 "life_days": life_days,
+                "is_count": is_count,
+                "max_count": max_count,
             })
         
         headers = {
@@ -149,6 +154,13 @@ class DeployHandler(object):
 
         # print(status)
         if status:
+
+            # 容器数量是否超过上限
+            if status.get('overNumLimit') == True:
+                result['error'] = '容器创建数量超过上限'
+                result['status'] = False
+                return result
+
             # 资源是否不足
             if status.get('outOfResource') == True:
                 result['error'] = '无可分配资源，请适当释放您的资源或通知资源负责人'
