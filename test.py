@@ -2,12 +2,19 @@ from KubeApi.app import KubeClient
 import _thread
 THREAD_NUM = 1
 
+is_create_ops_topo_by_id = True
 is_get_pod_by_uid = False
 is_get_pod_list = False
 is_create = False
 
-uid = 'zengjianjian'
+uid = 'han_chen'
 
+
+templateCfg = {
+    "templateId": "5cb88725-2ebf-4342-ab45-6512505739ff",
+    "topoName": "tp1.top",
+    "topoLifeDays": 30
+}
 
 
 
@@ -37,8 +44,7 @@ configList = [{
 }]
 
 depNames = [
-"xn-autotest-sdkuse57cb076b078ca73d416d6d538df5c45",
-"xn-autotest-sdkusf52c0847acbf72db771a1dd9c008b082",
+"xn-autotest-sdkus157267fa8234e991767bd91084fbd73a",
 ]
 
 
@@ -71,12 +77,18 @@ def getPodByUid():
     res = kubeClient.handle('deployment','GET_DEPS_BY_UID')
     print(res,type(res))
 
+def createOpsTopoByTempId():
+    kubeClient = KubeClient(uid)
+    res = kubeClient.handle('server','CREATE_TOPO_BY_TEMP',templateCfg)
+    print(res,type(res))
 
 for i in range(THREAD_NUM):
-    if is_get_pod_by_uid:
-         _thread.start_new_thread(getPodByUid,(),)
+    if is_create_ops_topo_by_id:
+        _thread.start_new_thread(createOpsTopoByTempId,(),)
+    elif is_get_pod_by_uid:
+        _thread.start_new_thread(getPodByUid,(),)
     elif is_get_pod_list:
-         _thread.start_new_thread(getPodList,(),)
+        _thread.start_new_thread(getPodList,(),)
     else:
         if is_create:
             _thread.start_new_thread(createDeps,(),)

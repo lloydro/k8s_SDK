@@ -1,5 +1,6 @@
 
 from KubeApi.handler.deploy import DeployHandler
+from KubeApi.handler.server import ServerHandler
 
 class KubeClient(object):
 
@@ -44,5 +45,9 @@ class KubeClient(object):
         if resource_type == 'deployment' and handle_type == 'GET_DEPS_BY_UID':
             handler = DeployHandler(self.uid)
             result = handler.get_deps_by_uid()
+        
+        if resource_type == 'server' and handle_type == 'CREATE_TOPO_BY_TEMP':
+            handler = ServerHandler(self.uid)
+            result = handler.create_ops_topo_by_template_id(datas)
 
         return result
