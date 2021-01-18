@@ -50,4 +50,8 @@ class KubeClient(object):
             handler = ServerHandler(self.uid)
             result = handler.create_ops_topo_by_template_id(datas)
 
+        if resource_type == 'server' and handle_type == 'SWITCH_TOPO':
+            handler = ServerHandler(self.uid)
+            result = handler.switch_ops_topo(datas)
+
         return result

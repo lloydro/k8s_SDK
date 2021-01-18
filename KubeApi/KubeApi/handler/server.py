@@ -9,7 +9,7 @@ import uuid
 import random
 import math
 import re
-from KubeApi.config.settings import REQUEST_URL,SERVER_IP_DELAY,SERVER_IP_TIMES
+from KubeApi.config.settings import REQUEST_URL,SERVER_IP_DELAY,SERVER_IP_TIMES,DEVICE_REBOOT_TIMES
 import requests
 
 
@@ -229,4 +229,116 @@ class ServerHandler(object):
         return result
 
 
+
+
+
+
+
+
+
+
+    '''
+    switch an openstack topo . （切换Openstack拓扑）
+
+    ::
     
+        >>> Request example:
+
+        switchCfg = {
+            "clusterId": 1,
+            "node_name": "kolla-compute17",
+            "topoId": "7ea6542b-a717-4630-bbde-90a4491c26a2",
+            "topoName": "switchTest", 
+            "networkNum": 3,
+            "newTopo": {
+                "560d837c-11c0-43d2-b70b-6fa2816178e5" : [ 
+                    "net1",
+                    "net2"
+                ]
+            },
+            "is_reboot_exp": 1
+        }
+
+
+        >>> Response example:
+        {
+            "status": True,
+            "error": "",
+            "data": {}
+        }
+
+    '''
+    def switch_ops_topo(self,switchCfg):
+
+
+        result = {
+            'datas': {},
+            'error': '',
+            'status': False
+        }
+
+        reqData = switchCfg
+        reqData['uid'] = self.uid
+
+        print("switch_ops_topo request datas:",reqData)
+        
+        headers = {
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "User-Agent": "python-requests/2.9.1",
+        }
+        url = REQUEST_URL + "/api/ops/switchTopo"
+        response = requests.post(url=url, data=json.dumps(reqData), headers=headers, verify=False)
+        response = response.content.decode('UTF-8')
+        response = json.loads(response)
+
+        print("response ===========================")
+        pprint(response)
+
+        data = response.get('data')
+        info = response.get('message').get('info')
+        critical_error = response.get('message').get('critical_error')
+        status = response.get('status').get('res')
+
+        print("response status",status)
+
+        if not status:
+            result['error'] = "error: %s  \r\n  critical_error: %s " % (str(info), str(critical_error) )
+            return result
+
+        # 切换成功，重启设备(这里仅重启LC)
+        is_reboot_exp = switchCfg.get('is_reboot_exp')
+        newTopo = switchCfg.get('newTopo')
+        clusterId = switchCfg.get('clusterId')
+        if is_reboot_exp:
+            for deviceId, linkList in newTopo.items():
+                rebootBody = {
+                    "uid": self.uid,
+                    "clusterId": clusterId,
+                    "deviceId": deviceId,
+                    "is_only_lc": 1
+                }
+                url = REQUEST_URL + "/api/ops/rebootAll"
+
+                for i in range(DEVICE_REBOOT_TIMES):
+                    resposne = requests.post(url=url, data=json.dumps(rebootBody), headers=headers, verify=False)
+                    resposne = resposne.content.decode('UTF-8')
+                    resposne = json.loads(resposne)
+
+                    rebootStatus = response.get('status').get('res')
+                    rebootError = response.get('message').get('error')
+                    if not rebootStatus:
+                        print( "第%d次重启失败：%s;失败日志: %s" % (i, str(deviceId), str(rebootError)) )
+                        if i == (int(DEVICE_REBOOT_TIMES) - 1):
+                            result['error'] = "设备%s重启多次失败!" % deviceId 
+                            return result
+
+                    break
+
+        # 最终判断是否有异常
+        if not result['error']:
+            result['status'] = True
+
+        print("result========================")
+        pprint(result)
+        return result

@@ -3,6 +3,7 @@ import _thread
 THREAD_NUM = 1
 
 is_create_ops_topo_by_id = True
+is_switch_ops_topo = False
 is_get_pod_by_uid = False
 is_get_pod_list = False
 is_create = False
@@ -16,6 +17,21 @@ templateCfg = {
     "topoLifeDays": 30
 }
 
+
+switchCfg = {
+    "clusterId": 1,
+    "node_name": "kolla-compute17",
+    "topoName": "switchTest", 
+    "topoId": "7ea6542b-a717-4630-bbde-90a4491c26a2",
+    "networkNum": 3,
+    "newTopo": {
+        "560d837c-11c0-43d2-b70b-6fa2816178e5" : [ 
+            "net1",
+            "net2"
+        ]
+    },
+    "is_reboot_exp": 1
+}
 
 
 configList = [{
@@ -82,9 +98,16 @@ def createOpsTopoByTempId():
     res = kubeClient.handle('server','CREATE_TOPO_BY_TEMP',templateCfg)
     print(res,type(res))
 
+def switchOpsTopo():
+    kubeClient = KubeClient(uid)
+    res = kubeClient.handle('server','SWITCH_TOPO',switchCfg)
+    print(res,type(res))
+
 for i in range(THREAD_NUM):
     if is_create_ops_topo_by_id:
         _thread.start_new_thread(createOpsTopoByTempId,(),)
+    elif is_switch_ops_topo:
+        _thread.start_new_thread(switchOpsTopo,(),)
     elif is_get_pod_by_uid:
         _thread.start_new_thread(getPodByUid,(),)
     elif is_get_pod_list:

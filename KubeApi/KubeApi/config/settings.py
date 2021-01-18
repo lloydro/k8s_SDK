@@ -10,3 +10,4 @@ POD_IP_TIMES = 1440 # 获取pod ip的次数
 
 SERVER_IP_DELAY = 10 # 获取server addr的等待时间，单位s
 SERVER_IP_TIMES = 1440 # 获取server addr的次数
+DEVICE_REBOOT_TIMES = 3 # 重启设备的次数
