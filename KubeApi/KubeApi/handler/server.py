@@ -196,9 +196,9 @@ class ServerHandler(object):
                     
                 # 填充实例参数
                 server = servers.get(server_id)
-                servers['addr'] = addr
-                servers['console_host'] = console_host
-                servers['console_port'] = console_port
+                server['addr'] = addr
+                server['console_host'] = console_host
+                server['console_port'] = console_port
 
                 #若是管理板，填充设备参数
                 if cm_dev_map.get(server_id):

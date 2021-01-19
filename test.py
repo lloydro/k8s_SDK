@@ -21,8 +21,8 @@ templateCfg = {
 switchCfg = {
     "clusterId": 1,
     "node_name": "kolla-compute17",
-    "topoName": "switchTest", 
     "topoId": "7ea6542b-a717-4630-bbde-90a4491c26a2",
+    "topoName": "switchTest", 
     "networkNum": 3,
     "newTopo": {
         "560d837c-11c0-43d2-b70b-6fa2816178e5" : [ 
