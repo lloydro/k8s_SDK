@@ -2,8 +2,8 @@ from KubeApi.app import KubeClient
 import _thread
 THREAD_NUM = 1
 
-is_create_ops_topo_by_id = True
-is_switch_ops_topo = False
+is_create_ops_topo_by_id = False
+is_switch_ops_topo = True
 is_get_pod_by_uid = False
 is_get_pod_list = False
 is_create = False
@@ -21,14 +21,21 @@ templateCfg = {
 switchCfg = {
     "clusterId": 1,
     "node_name": "kolla-compute17",
-    "topoId": "7ea6542b-a717-4630-bbde-90a4491c26a2",
+    "topoId": "79c05005-ccef-4326-a908-adab6d726a11",
     "topoName": "switchTest", 
     "networkNum": 3,
     "newTopo": {
-        "560d837c-11c0-43d2-b70b-6fa2816178e5" : [ 
+        "9a84bb8e-76d0-45d9-af55-231244e1118a" : [ 
             "net1",
             "net2"
-        ]
+        ],
+        "3647f5ec-3756-4530-a650-7d23cab9b908" : [ 
+            "net1",
+            "net3"
+        ],
+        "0b1cdc20-9546-489b-b51d-fb1fd4fd3a3a" : [ 
+            "net3"
+        ],
     },
     "is_reboot_exp": 1
 }
