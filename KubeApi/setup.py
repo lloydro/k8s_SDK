@@ -12,7 +12,7 @@ from setuptools import find_packages
 
 setup(
     name="KubeApi",
-    version="1.1.1", # 添加了openstack的拓扑切换
+    version="1.1.2", # 调整openstack的拓扑创建输出与切换的入参
     author="wangyc",
     author_email="wangyongcheng@ruijie.com.cn",
     description="for auto test",
