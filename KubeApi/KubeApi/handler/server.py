@@ -132,7 +132,8 @@ class ServerHandler(object):
 
         # 创建成功，保存数据
         servers = data.get('servers')
-        devices = data.get('devices')   
+        devices = data.get('devices')
+        netList = data.get('netList')    
         clusterId = data.get('clusterId')   
         node_name = data.get('node_name')   
         topoId = data.get('topoId')   
@@ -219,6 +220,7 @@ class ServerHandler(object):
         result['datas']['clusterId'] = clusterId
         result['datas']['node_name'] = node_name
         result['datas']['topoId'] = topoId
+        result['datas']['netList'] = netList
 
         # 最终判断是否有异常
         if not result['error']:

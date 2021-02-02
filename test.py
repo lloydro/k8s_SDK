@@ -12,29 +12,30 @@ uid = 'han_chen'
 
 
 templateCfg = {
-    "templateId": "5cb88725-2ebf-4342-ab45-6512505739ff",
-    "topoName": "tp1.top",
-    "topoLifeDays": 30
+    "templateId": "6fa45f24-d6de-43cb-95bb-5843524dd59c",
+    "topoName": "switchTst",
+    "topoLifeDays": 30000,
+    "app_type": "switchtest"
 }
 
 
+# 'netList': {
+#     'net1': '23de15de-1e7b-4eb1-a9ea-f6f6ed99ca48',
+#     'net2': 'fa20c820-db1f-4838-b609-86b5028eb43b',
+#     'net3': 'c05e0728-a5ea-4ac8-95dd-73d4f049ecb7'
+# }
 switchCfg = {
     "clusterId": 1,
-    "node_name": "kolla-compute17",
-    "topoId": "79c05005-ccef-4326-a908-adab6d726a11",
+    "node_name": "kolla-compute18",
+    "topoId": "5c5728b2-dc63-46d9-b344-800363ac125b",
     "topoName": "switchTest", 
-    "networkNum": 3,
     "newTopo": {
-        "9a84bb8e-76d0-45d9-af55-231244e1118a" : [ 
-            "net1",
-            "net2"
+        "b63c1f80-3fbf-4c5a-8334-90402c4bd7d5" : [ 
+            "23de15de-1e7b-4eb1-a9ea-f6f6ed99ca48",
+            "c05e0728-a5ea-4ac8-95dd-73d4f049ecb7"
         ],
-        "3647f5ec-3756-4530-a650-7d23cab9b908" : [ 
-            "net1",
-            "net3"
-        ],
-        "0b1cdc20-9546-489b-b51d-fb1fd4fd3a3a" : [ 
-            "net3"
+        "6477c937-e2eb-4af3-a46f-17ed6f0f2216" : [ 
+            "c05e0728-a5ea-4ac8-95dd-73d4f049ecb7"
         ],
     },
     "is_reboot_exp": 1
