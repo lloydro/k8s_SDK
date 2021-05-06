@@ -3,9 +3,10 @@ import _thread
 THREAD_NUM = 1
 
 is_create_ops_topo_by_id = False
-is_switch_ops_topo = True
+is_switch_ops_topo = False
 is_get_pod_by_uid = False
 is_get_pod_list = False
+is_get_pods_ip = True
 is_create = False
 
 uid = 'han_chen'
@@ -26,35 +27,57 @@ templateCfg = {
 # }
 switchCfg = {
     "clusterId": 1,
-    "node_name": "kolla-compute18",
-    "topoId": "5c5728b2-dc63-46d9-b344-800363ac125b",
-    "topoName": "switchTest", 
+    "node_name": "kolla-compute07",
+    "topoId": "9d854417-c024-447f-942a-1735818ac4e1",
+    "topoName": "autotest", 
     "newTopo": {
-        "b63c1f80-3fbf-4c5a-8334-90402c4bd7d5" : [ 
-            "23de15de-1e7b-4eb1-a9ea-f6f6ed99ca48",
-            "c05e0728-a5ea-4ac8-95dd-73d4f049ecb7"
+        "a77241c3-695e-4a11-841b-c0fcd5105b75" : [
+            "64b238fc-17e0-4076-9cda-84995f3ba530",     # 本次拓扑连接关系
+            "0e740209-2d2e-4d12-951c-a0502268b0f3",
+            "47b915ae-035a-41cc-9628-1a8121a4ad84",
+            "711c46c1-4f3c-4772-a245-55a2b08445c2",
+            # "9f0d4d0d-87c2-43c2-a6f9-0d803d17c8c0"
         ],
-        "6477c937-e2eb-4af3-a46f-17ed6f0f2216" : [ 
-            "c05e0728-a5ea-4ac8-95dd-73d4f049ecb7"
+        "6534ec0e-8f9d-4f62-96f5-c76453f530ce" : [
+            "70ed59f1-596e-4cc6-97c5-211ab95fe046",
+            "7ea53408-d514-4e5a-8cec-f6d8f3b88b38",
+            "47b915ae-035a-41cc-9628-1a8121a4ad84",
+            "711c46c1-4f3c-4772-a245-55a2b08445c2",
+            # "9f0d4d0d-87c2-43c2-a6f9-0d803d17c8c0"
         ],
+        # "b573708f-89c6-46fe-8d8f-4267276527f7" : [
+        #     "64b238fc-17e0-4076-9cda-84995f3ba530",
+        #     "0e740209-2d2e-4d12-951c-a0502268b0f3",
+        #     "70ed59f1-596e-4cc6-97c5-211ab95fe046",
+        #     "7ea53408-d514-4e5a-8cec-f6d8f3b88b38"
+        # ],
     },
     "is_reboot_exp": 1
 }
 
 
 configList = [{
-    "image": "docker-hub.ruijie.work/base_project/robotframework-12.5pl1:latest",
-    "command": '/usr/bin/AutoStart',
-    "cpu": 1024,
-    "memory": 4096,
-    "ephemeral_storage": 10,
+    "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
+    "command" : '/usr/bin/AutoStart',
+    "cpu" : 500,
+    "memory" : 200,
+    "ephemeral_storage" : 10,
+    "ports": [22,3000,3306,4200,8270],
     "node_labels": {
-        "app": "jenkins",
+         "app" : "local_test"
     },
-    "ports": [22, 3306, 4200, 8270],
-    "is_resource_occupied": True,
-    "is_count": 1,
-    "max_count": 2,
+    # "image": "docker-hub.ruijie.work/base_project/robotframework-12.5pl1:latest",
+    # "command": '/usr/bin/AutoStart',
+    # "cpu": 1024,
+    # "memory": 4096,
+    # "ephemeral_storage": 10,
+    # "node_labels": {
+    #     "app": "jenkins",
+    # },
+    # "ports": [22, 3306, 4200, 8270],
+    # "is_resource_occupied": True,
+    # "is_count": 1,
+    # "max_count": 2,
 # },{
 #     "image" : 'docker-hub.ruijie.work/base_project/bfn-rf:latest',
 #     "command" : '/usr/bin/AutoStart',
@@ -68,7 +91,8 @@ configList = [{
 }]
 
 depNames = [
-"xn-autotest-sdkus157267fa8234e991767bd91084fbd73a",
+'xn-autotest-sdkusceb56fbc74f0c4fac8d110ee97e6d167',
+'xn-autotest-sdkus8e266368ea2534b4a59c679b33064f66',
 ]
 
 
@@ -96,6 +120,11 @@ def getPodList():
     res = kubeClient.handle('deployment','GET_NAMES')
     print(res,type(res))
 
+def getPodsIp():
+    kubeClient = KubeClient(uid)
+    res = kubeClient.handle('deployment','GET_PODS_IP',depNames)
+    print(res,type(res))
+
 def getPodByUid():
     kubeClient = KubeClient(uid)
     res = kubeClient.handle('deployment','GET_DEPS_BY_UID')
@@ -120,6 +149,8 @@ for i in range(THREAD_NUM):
         _thread.start_new_thread(getPodByUid,(),)
     elif is_get_pod_list:
         _thread.start_new_thread(getPodList,(),)
+    elif is_get_pods_ip:
+        _thread.start_new_thread(getPodsIp,(),)
     else:
         if is_create:
             _thread.start_new_thread(createDeps,(),)

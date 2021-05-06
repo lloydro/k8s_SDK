@@ -11,3 +11,4 @@ KubeApi/config/__init__.py
 KubeApi/config/settings.py
 KubeApi/handler/__init__.py
 KubeApi/handler/deploy.py
+KubeApi/handler/server.py

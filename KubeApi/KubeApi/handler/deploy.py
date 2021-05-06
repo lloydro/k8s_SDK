@@ -79,7 +79,7 @@ class DeployHandler(object):
         }
 
     '''
-    def create_deps(self,configList):
+    def create_deps(self,configList,is_wait_ip = True):
 
 
         result = {
@@ -200,49 +200,55 @@ class DeployHandler(object):
                             result.get("datas").get("deps")[dep_name][k] = dep_val
 
             # pprint(result)
-            # print('++++++++++++++++++++++++++++++++++')
-            # get pod_ip 
-            # 添加podIp
-            url = REQUEST_URL + "/api/getPodIps"
-            for i in range(POD_IP_TIMES):
-                time.sleep(POD_IP_DELAY)
-                res = requests.post(url=url, data=json.dumps(podNames), headers=headers, verify=False)
-                res = res.content.decode('UTF-8')
-                res = json.loads(res)
-                # print('get_pod_res====================',res)
-                if res.get('status') == True:
-                    pod_ips = res.get('datas')
-                    for name,props in result.get("datas").get("deps").items():
-                        result.get("datas").get("deps")[name]['pod_ip'] = pod_ips[name]
-                    break
 
-            # 超出等待时间，需要删除未获取到pod_ip的容器，并抛异常
-            delete_dep_list = []
-            for d_name,d_item in result.get("datas").get("deps").items():
-                # 有一个没得到pod_ip，就都删除
-                if not d_item.get('pod_ip'):
-                    if len(podNames) > 0:
-                        for p_name in podNames:
-                            delete_dep_list.append({
-                                "name" : p_name
-                            })
-                        print('----------------部分容器未获得pod_ip，需要删除所有容器:-----------------------:')
-                        print(podNames)
-                        delete_res = self.delete_deps(delete_dep_list)
-                        print('----------------删除结果-------------------:')
-                        print(delete_res)
-                        # TODO.清空result数据
-                        result = {
-                            'datas': {
-                                'node': '',
-                                'deps':{}
-                            },
-                            'error': '',
-                            'status': True
-                        }
-                        result['error'] = '创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置'
-                        result['status'] = False
-                        # raise Exception("创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置")
+            # is_wait_ip is True -> get pod_ip 
+            if is_wait_ip:
+                # 添加podIp
+                url = REQUEST_URL + "/api/getPodIps"
+                for i in range(POD_IP_TIMES):
+                    time.sleep(POD_IP_DELAY)
+                    res = requests.post(url=url, data=json.dumps(podNames), headers=headers, verify=False)
+                    res = res.content.decode('UTF-8')
+                    res = json.loads(res)
+                    # print('get_pod_res====================',res)
+                    if res.get('status') == True:
+                        pod_ips = res.get('datas')
+                        for name,props in result.get("datas").get("deps").items():
+                            result.get("datas").get("deps")[name]['pod_ip'] = pod_ips[name]
+                        break
+
+                # 超出等待时间，需要删除未获取到pod_ip的容器，并抛异常
+                delete_dep_list = []
+                for d_name,d_item in result.get("datas").get("deps").items():
+                    # 有一个没得到pod_ip，就都删除
+                    if not d_item.get('pod_ip'):
+                        if len(podNames) > 0:
+                            for p_name in podNames:
+                                delete_dep_list.append({
+                                    "name" : p_name
+                                })
+                            print('----------------部分容器未获得pod_ip，需要删除所有容器:-----------------------:')
+                            print(podNames)
+                            delete_res = self.delete_deps(delete_dep_list)
+                            print('----------------删除结果-------------------:')
+                            print(delete_res)
+                            # TODO.清空result数据
+                            result = {
+                                'datas': {
+                                    'node': '',
+                                    'deps':{}
+                                },
+                                'error': '',
+                                'status': True
+                            }
+                            result['error'] = '创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置'
+                            result['status'] = False
+                            # raise Exception("创建失败，容器启动异常导致部分pod_ip未获取到，请确认配置")
+            # is_wait_ip is Fakse -> pod_ip = '0.0.0.0'
+            else:
+                for name,props in result.get("datas").get("deps").items():
+                    result.get("datas").get("deps")[name]['pod_ip'] = '0.0.0.0'
+
             
             # 获取到podIp后，判断容器状态
             url_status = REQUEST_URL + "/api/isPodRunning?uid=" + self.uid
@@ -386,6 +392,64 @@ class DeployHandler(object):
 
         for item in response.get('data').get("_items"):
             result['datas']['names'].append(item.get("_spec").get("_containers")[0].get("_name"))
+
+        # pprint(result)
+        return result
+    
+
+
+
+    '''
+    get pods ip. （获取容器IP）
+
+    ::
+    
+        >>>  Request example:
+
+        Null
+
+        >>> Response example:
+        {
+            'datas': {
+                'node': '',
+                'ips': {
+
+                }
+            },
+            'error': '',
+            'status': True
+        }
+
+    '''
+
+    def get_pods_ip(self, podNames = []):
+
+        result = {
+            'datas': {
+                'ips':{}
+            },
+            'error': '',
+            'status': False
+        }
+
+        headers = {
+            "Accept": "*/*",
+            "Accept-Encoding": "gzip, deflate",
+            "User-Agent": "python-requests/2.9.1",
+        }
+
+        # 构造请求
+        uid = self.uid.replace("_", "-")
+
+        url = REQUEST_URL + "/api/getPodIps"
+        res = requests.post(url=url, data=json.dumps(podNames), headers=headers, verify=False)
+        res = res.content.decode('UTF-8')
+        res = json.loads(res)
+        # print('get_pod_res====================',res)
+        if res.get('status') == True:
+            pod_ips = res.get('datas')
+            result['datas']['ips'] = pod_ips
+            result['status'] = True
 
         # pprint(result)
         return result

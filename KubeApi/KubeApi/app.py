@@ -53,5 +53,13 @@ class KubeClient(object):
         if resource_type == 'server' and handle_type == 'SWITCH_TOPO':
             handler = ServerHandler(self.uid)
             result = handler.switch_ops_topo(datas)
+        
+        if resource_type == 'deployment' and handle_type == 'CREATE_WITHOUT_WAIT':
+            handler = DeployHandler(self.uid)
+            result = handler.create_deps(datas,is_wait_ip = False)
+        
+        if resource_type == 'deployment' and handle_type == 'GET_PODS_IP':
+            handler = DeployHandler(self.uid)
+            result = handler.get_pods_ip(podNames = datas)
 
         return result
