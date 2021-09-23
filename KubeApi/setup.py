@@ -12,7 +12,7 @@ from setuptools import find_packages
 
 setup(
     name="KubeApi",
-    version="1.1.3", # 添加了get_pods_ip功能，提供创建容器与等待容器IP的功能分离选项
+    version="1.1.4", # 添加了get_pods_ip功能，提供创建容器与等待容器IP的功能分离选项
     author="wangyc",
     author_email="wangyongcheng@ruijie.com.cn",
     description="for auto test",

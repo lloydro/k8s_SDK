@@ -107,6 +107,20 @@ class DeployHandler(object):
 
             is_count = config.get('is_count') if config.get('is_count') else 0
             max_count = config.get('max_count') if config.get('max_count') else 0
+            app_info = config.get('app_info') if config.get('app_info') else None
+            if app_info:
+                if not app_info['project']:
+                    app_info['project'] = "未知"
+                if not app_info['department']:
+                    app_info['department'] = "未知"
+                if not app_info['panel']:
+                    app_info['panel'] = "未知"
+                if not app_info['packet']:
+                    app_info['packet'] = "未知"
+                if not app_info['component']:
+                    app_info['component'] = "未知"
+                if not app_info['usage']:
+                    app_info['usage'] = "未知"
 
             reqData.append({
                 "id": uuid.uuid4().__str__(),
@@ -134,6 +148,7 @@ class DeployHandler(object):
                 "life_days": life_days,
                 "is_count": is_count,
                 "max_count": max_count,
+                "app_info": app_info
             })
         
         headers = {

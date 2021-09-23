@@ -6,7 +6,7 @@ is_create_ops_topo_by_id = False
 is_switch_ops_topo = False
 is_get_pod_by_uid = False
 is_get_pod_list = False
-is_get_pods_ip = True
+is_get_pods_ip = False
 is_create = False
 
 uid = 'han_chen'
@@ -66,6 +66,14 @@ configList = [{
     "node_labels": {
          "app" : "local_test"
     },
+    "app_info": {
+        "project": "项目1",
+        "department": "部门1",
+        "panel": "控制面",
+        "packet": "组件包",
+        "component": "组件",
+        "usage": "用途",
+    }
     # "image": "docker-hub.ruijie.work/base_project/robotframework-12.5pl1:latest",
     # "command": '/usr/bin/AutoStart',
     # "cpu": 1024,
@@ -91,8 +99,7 @@ configList = [{
 }]
 
 depNames = [
-'xn-autotest-sdkusceb56fbc74f0c4fac8d110ee97e6d167',
-'xn-autotest-sdkus8e266368ea2534b4a59c679b33064f66',
+'xn-autotest-sdkusc077da4533ef6c719617125617a053ec',
 ]
 
 
